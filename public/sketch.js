@@ -4,7 +4,7 @@ function getCoords() {
   if ("geolocation" in navigator) {
     console.log("geolocation available");
     navigator.geolocation.getCurrentPosition(async position => {
-      let lat, lon, weather, air;
+      let lat, lon, weather, air, city, air_value, air_value_unit;
       try {
         lat = position.coords.latitude;
         lon = position.coords.longitude;
@@ -18,21 +18,23 @@ function getCoords() {
         weather = json.weather.currently;
         city = json.city;
         air = json.air_quality.results[0].measurements[0];
-        const air_value = air.value;
-        const air_value_unit = air.unit;
-
-        document.getElementById("summary").textContent = weather.summary;
-        document.getElementById("temperature").textContent =
-          weather.temperature;
-        document.getElementById("city").textContent = city;
-        document.getElementById("air-value").textContent = air_value;
-        document.getElementById("air-value-units").textContent = air_value_unit;
+        air_value = air.value;
+        air_value_unit = air.unit;
       } catch (error) {
-        console.error(error);
+        // console.error(error);
         air = { value: -1 };
+        // air_value = -1;
+        // air_value_unit = -1;
+
         console.log("Something went wrong...");
         document.getElementById("air-value").textContent = "NO READING";
       }
+      document.getElementById("summary").textContent = weather.summary;
+      document.getElementById("temperature").textContent = weather.temperature;
+      document.getElementById("city").textContent = city;
+      document.getElementById("air-value").textContent = air_value;
+      document.getElementById("air-value-units").textContent = air_value_unit;
+
       const data = { lat, lon, weather, city, air };
       const options = {
         method: "POST",
