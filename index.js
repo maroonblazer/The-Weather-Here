@@ -6,25 +6,25 @@ const fetch = require("node-fetch");
 require("dotenv").config();
 
 const app = express();
-const port = 3000;
-app.listen(port, () => console.log(`Listening on port ${port}`));
-// app.listen(port, listening);
+const port = process.env.PORT || 3000;
+// app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(port, listening);
 app.use(express.json({ limit: "1mb" }));
 app.use(express.static("public"));
 
 // browser-sync
-// const browserSync = require("browser-sync");
-// function listening() {
-//   console.log(`Demo server available on http://localhost:${port}`);
-//   browserSync({
-//     files: ["public/*.{html,js,css}", "public/checkins/*.{html,js,css}"],
-//     online: false,
-//     open: false,
-//     port: port + 1,
-//     proxy: "localhost:" + port,
-//     ui: false
-//   });
-// }
+const browserSync = require("browser-sync");
+function listening() {
+  console.log(`Demo server available on http://localhost:${port}`);
+  browserSync({
+    files: ["public/*.{html,js,css}", "public/checkins/*.{html,js,css}"],
+    online: false,
+    open: false,
+    port: port + 1,
+    proxy: "localhost:" + port,
+    ui: false
+  });
+}
 
 const db = new Datastore("database.db");
 db.loadDatabase();
